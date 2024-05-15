@@ -68,7 +68,7 @@ if uploaded_pdf is not None:
 # Opcje wyszukiwania
 st.sidebar.title("Wyszukiwanie w plikach tekstowych")
 search_word = st.sidebar.text_input("Wpisz słowo do wyszukania")
-context_words = st.sidebar.slider("Liczba słów w otoczeniu", 5, 40, 1)
+context_words = st.sidebar.slider("Liczba słów w otoczeniu", 1, 40, 16)
 
 if st.sidebar.button("Szukaj"):
     if search_word:
