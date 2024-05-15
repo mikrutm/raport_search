@@ -38,6 +38,12 @@ def search_word_in_file(file_path, search_word, context_words=3):
     
     return results
 
+def highlight_word(context, search_word):
+    search_word_lower = search_word.lower()
+    highlighted = context.replace(search_word_lower, f'<span style="color:red">{search_word_lower}</span>')
+    highlighted = highlighted.replace(search_word, f'<span style="color:red">{search_word}</span>')
+    return highlighted
+
 # Konfiguracja Streamlit
 st.title("PDF to Text Transcriber and Search")
 
@@ -73,13 +79,14 @@ if st.sidebar.button("Szukaj"):
             if results:
                 all_results[txt_file] = results
         
-        st.sidebar.title("Wyniki wyszukiwania")
+        st.title("Wyniki wyszukiwania")
         if all_results:
             for txt_file, contexts in all_results.items():
-                st.sidebar.write(f"Plik: {txt_file}")
+                st.write(f"**Plik: {txt_file}**")
                 for context in contexts:
-                    st.sidebar.write(f"... {context} ...")
+                    highlighted_context = highlight_word(context, search_word)
+                    st.markdown(f"... {highlighted_context} ...", unsafe_allow_html=True)
         else:
-            st.sidebar.write("Nie znaleziono wyników.")
+            st.write("Nie znaleziono wyników.")
     else:
-        st.sidebar.write("Proszę wpisać słowo do wyszukania.")
+        st.write("Proszę wpisać słowo do wyszukania.")
