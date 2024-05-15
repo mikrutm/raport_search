@@ -18,18 +18,35 @@ def save_text_from_pdf(pdf_file, txt_folder):
     
     return txt_path
 
+def get_txt_files(txt_folder):
+    return [f for f in os.listdir(txt_folder) if f.endswith('.txt')]
+
 # Konfiguracja Streamlit
 st.title("PDF to Text Transcriber")
+
+# Ustawienie katalogu wyjściowego
+txt_folder = 'txt_catalog'
+if not os.path.exists(txt_folder):
+    os.makedirs(txt_folder)
+
+# Pasek boczny z listą plików tekstowych
+st.sidebar.title("Lista plików tekstowych")
+txt_files = get_txt_files(txt_folder)
+
+selected_txt_file = st.sidebar.selectbox("Wybierz plik tekstowy", txt_files)
+
+if selected_txt_file:
+    txt_path = os.path.join(txt_folder, selected_txt_file)
+    st.sidebar.write(f"Wybrano plik: {selected_txt_file}")
+    
+    with open(txt_path, 'r', encoding='utf-8') as file:
+        file_content = file.read()
+        st.text_area("Zawartość pliku", file_content, height=400)
 
 # Wczytaj plik PDF
 uploaded_pdf = st.file_uploader("Wybierz plik PDF", type="pdf")
 
 if uploaded_pdf is not None:
-    # Zdefiniuj katalog wyjściowy
-    txt_folder = 'txt_catalog'
-    if not os.path.exists(txt_folder):
-        os.makedirs(txt_folder)
-    
     # Przetwórz PDF i zapisz jako plik tekstowy
     txt_path = save_text_from_pdf(uploaded_pdf, txt_folder)
     
@@ -37,4 +54,5 @@ if uploaded_pdf is not None:
 
     # Wyświetl zawartość przetranskrybowanego tekstu
     with open(txt_path, 'r', encoding='utf-8') as file:
-        st.text(file.read())
+        st.text_area("Zawartość przetranskrybowanego pliku", file.read(), height=400)
+
