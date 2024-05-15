@@ -54,7 +54,8 @@ if not os.path.exists(txt_folder):
 # Pasek boczny z listą plików tekstowych
 st.sidebar.title("Lista plików tekstowych")
 txt_files = get_txt_files(txt_folder)
-st.text(txt_files)
+for t in txt_files:
+    st.text(t)  
 
 # Wczytaj plik PDF
 uploaded_pdf = st.file_uploader("Wybierz plik PDF", type="pdf")
