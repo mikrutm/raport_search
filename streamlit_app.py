@@ -55,4 +55,3 @@ if uploaded_pdf is not None:
     # Wyświetl zawartość przetranskrybowanego tekstu
     with open(txt_path, 'r', encoding='utf-8') as file:
         st.text_area("Zawartość przetranskrybowanego pliku", file.read(), height=400)
-
