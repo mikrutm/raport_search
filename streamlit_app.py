@@ -23,14 +23,14 @@ def get_txt_files(txt_folder):
 
 def search_word_in_file(file_path, search_word, context_words=3):
     with open(file_path, 'r', encoding='utf-8') as file:
-        words = file.read().split()
+        words = file.read().lower().split()
     
     results = []
     search_word = search_word.lower()
     word_count = len(words)
     
     for i, word in enumerate(words):
-        if search_word in word.lower():
+        if search_word == word:
             start = max(0, i - context_words)
             end = min(word_count, i + context_words + 1)
             context = ' '.join(words[start:end])
@@ -41,7 +41,6 @@ def search_word_in_file(file_path, search_word, context_words=3):
 def highlight_word(context, search_word):
     search_word_lower = search_word.lower()
     highlighted = context.replace(search_word_lower, f'<span style="color:red">{search_word_lower}</span>')
-    highlighted = highlighted.replace(search_word, f'<span style="color:red">{search_word}</span>')
     return highlighted
 
 # Konfiguracja Streamlit
