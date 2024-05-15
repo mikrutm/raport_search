@@ -52,10 +52,8 @@ if not os.path.exists(txt_folder):
     os.makedirs(txt_folder)
 
 # Pasek boczny z listą plików tekstowych
-st.sidebar.title("Lista plików tekstowych")
+
 txt_files = get_txt_files(txt_folder)
-for t in txt_files:
-    st.text(t)  
 
 # Wczytaj plik PDF
 uploaded_pdf = st.file_uploader("Wybierz plik PDF", type="pdf")
@@ -91,3 +89,7 @@ if st.sidebar.button("Szukaj"):
             st.write("Nie znaleziono wyników.")
     else:
         st.write("Proszę wpisać słowo do wyszukania.")
+st.sidebar.title("Lista plików tekstowych")
+with st.sidebar:
+    for t in txt_files:
+        st.text(t)  
