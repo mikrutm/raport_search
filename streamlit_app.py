@@ -44,7 +44,7 @@ def highlight_word(context, search_word):
     return highlighted
 
 # Konfiguracja Streamlit
-st.title("PDF to Text Transcriber and Search")
+st.title("Przeszukiwanie raportów")
 
 # Ustawienie katalogu wyjściowego
 txt_folder = 'txt_catalog'
@@ -54,6 +54,7 @@ if not os.path.exists(txt_folder):
 # Pasek boczny z listą plików tekstowych
 st.sidebar.title("Lista plików tekstowych")
 txt_files = get_txt_files(txt_folder)
+st.text(txt_files)
 
 # Wczytaj plik PDF
 uploaded_pdf = st.file_uploader("Wybierz plik PDF", type="pdf")
@@ -67,7 +68,7 @@ if uploaded_pdf is not None:
 # Opcje wyszukiwania
 st.sidebar.title("Wyszukiwanie w plikach tekstowych")
 search_word = st.sidebar.text_input("Wpisz słowo do wyszukania")
-context_words = st.sidebar.slider("Liczba słów w otoczeniu", 1, 10, 3)
+context_words = st.sidebar.slider("Liczba słów w otoczeniu", 5, 40, 1)
 
 if st.sidebar.button("Szukaj"):
     if search_word:
