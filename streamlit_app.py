@@ -103,12 +103,7 @@ if st.sidebar.button("Szukaj"):
 st.sidebar.title("Lista plików tekstowych")
 # Sortowanie przefiltrowanej listy plików według daty wyodrębnionej z nazw 
 # Funkcja do wyodrębnienia daty z nazwy pliku
-def extract_date_from_filename(filename):
-    try:
-        date_str = filename.split('_')[1].split('.')[0]
-        return datetime.strptime(date_str, '%Y-%m-%d')
-    except (IndexError, ValueError):
-        return None
+
 
 # Sortowanie przefiltrowanej listy plików według daty wyodrębnionej z nazw plików
 txt_files = sorted(txt_files, key=extract_date_from_filename)
