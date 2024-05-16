@@ -12,6 +12,7 @@ def extract_date_from_filename(filename):
     except (IndexError, ValueError):
         return None
 
+
 def save_text_from_pdf(pdf_file, txt_folder):
     pdf_reader = PdfReader(pdf_file)
     text_content = []
