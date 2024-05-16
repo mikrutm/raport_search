@@ -110,11 +110,8 @@ def extract_date_from_filename(filename):
     except (IndexError, ValueError):
         return None
 
-# Filtrowanie listy plików, aby usunąć te, które nie mają poprawnego formatu daty
-filtered_file_list = [filename for filename in txt_files if extract_date_from_filename(filename) is not None]
-
 # Sortowanie przefiltrowanej listy plików według daty wyodrębnionej z nazw plików
-txt_files = sorted(filtered_file_list, key=extract_date_from_filename)
+txt_files = sorted(txt_files, key=extract_date_from_filename)
 
 with st.sidebar:
 
