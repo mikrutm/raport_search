@@ -1,6 +1,11 @@
 import os
 import streamlit as st
 from PyPDF2 import PdfReader
+from datetime import datetime
+
+def extract_date_from_filename(filename):
+    date_str = filename.split('_')[1].split('.')[0]
+    return datetime.strptime(date_str, '%Y-%m-%d')
 
 def save_text_from_pdf(pdf_file, txt_folder):
     pdf_reader = PdfReader(pdf_file)
@@ -80,6 +85,7 @@ if st.sidebar.button("Szukaj"):
         
         st.title("Wyniki wyszukiwania")
         if all_results:
+            all_results = dict(sorted(all_results.items(), key=lambda item: extract_date_from_filename(item[0])))
             for txt_file, contexts in all_results.items():
                 st.write(f"**Plik: {txt_file}**")
                 for context in contexts:
@@ -90,6 +96,22 @@ if st.sidebar.button("Szukaj"):
     else:
         st.write("Proszę wpisać słowo do wyszukania.")
 st.sidebar.title("Lista plików tekstowych")
+# Sortowanie przefiltrowanej listy plików według daty wyodrębnionej z nazw 
+# Funkcja do wyodrębnienia daty z nazwy pliku
+def extract_date_from_filename(filename):
+    try:
+        date_str = filename.split('_')[1].split('.')[0]
+        return datetime.strptime(date_str, '%Y-%m-%d')
+    except (IndexError, ValueError):
+        return None
+
+# Filtrowanie listy plików, aby usunąć te, które nie mają poprawnego formatu daty
+filtered_file_list = [filename for filename in txt_files if extract_date_from_filename(filename) is not None]
+
+# Sortowanie przefiltrowanej listy plików według daty wyodrębnionej z nazw plików
+txt_files = sorted(filtered_file_list, key=extract_date_from_filename)
+
 with st.sidebar:
+
     for t in txt_files:
         st.text(t)  
