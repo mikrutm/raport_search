@@ -106,7 +106,7 @@ st.sidebar.title("Lista plików tekstowych")
 
 
 # Sortowanie przefiltrowanej listy plików według daty wyodrębnionej z nazw plików
-#txt_files = sorted(txt_files, key=extract_date_from_filename)
+txt_files = sorted(txt_files, key=extract_date_from_filename)
 
 with st.sidebar:
 
