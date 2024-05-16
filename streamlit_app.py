@@ -4,7 +4,7 @@ from PyPDF2 import PdfReader
 from datetime import datetime
 
 def extract_date_from_filename(filename):
-    date_str = filename.split('_')[1].split('.')[0]
+    date_str = filename.split(' ')[1].split('.')[0]
     return datetime.strptime(date_str, '%Y-%m-%d')
 
 def save_text_from_pdf(pdf_file, txt_folder):
