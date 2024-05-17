@@ -108,10 +108,11 @@ st.sidebar.title("Lista plików tekstowych")
 
 
 # Sortowanie przefiltrowanej listy plików według daty wyodrębnionej z nazw plików
-print(txt_files)
-for t in txt_files:
-    print(extract_date_from_filename(t))
-txt_files = sorted(txt_files, key=lambda item:  extract_date_from_filename(item))
+
+#for t in txt_files:
+#    print(extract_date_from_filename(t))
+
+txt_files = sorted(txt_files, key=extract_date_from_filename)
 
 with st.sidebar:
 
