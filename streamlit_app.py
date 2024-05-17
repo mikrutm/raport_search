@@ -7,6 +7,7 @@ def extract_date_from_filename(filename):
     try:
         # Wyodrębnienie części z datą
         date_str = filename.split(' ')[2].split('.')[0:3]
+        print(date_str)
         date_str = '.'.join(date_str)
         return datetime.strptime(date_str, '%d.%m.%y')
     except (IndexError, ValueError):
