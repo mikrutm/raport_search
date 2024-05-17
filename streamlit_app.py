@@ -114,7 +114,7 @@ for t in txt_files:
         filt_txt_files.append(t)
 
 txt_files = sorted(filt_txt_files, key=extract_date_from_filename)
-txt_files = txt_file[-1]
+txt_files = txt_files[-1]
 
 with st.sidebar:
 
