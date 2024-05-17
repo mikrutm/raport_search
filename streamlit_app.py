@@ -96,7 +96,7 @@ if st.sidebar.button("Szukaj"):
             results = search_word_in_file(file_path, search_word, context_words)
             if results:
                 all_results[txt_file] = results
-        
+        all_results = all_results[::-1]
         st.title("Wyniki wyszukiwania")
         if all_results:
             all_results = dict(sorted(all_results.items(), key=lambda item: extract_date_from_filename(item[0])))
