@@ -113,7 +113,7 @@ for t in txt_files:
     if  None != extract_date_from_filename(t):
         filt_txt_files.append(t)
 
-txt_files = sorted(filt_txt_files, key=extract_date_from_filename)
+txt_files = sorted(filt_txt_files, key=extract_date_from_filename)[-1]
 
 with st.sidebar:
 
