@@ -1,7 +1,70 @@
 import os
 import streamlit as st
 from PyPDF2 import PdfReader
-from datetime import datetime
+import streamlit as st
+import pymongo
+import glob
+import pandas as pd 
+import gridfs
+from bson import ObjectId
+
+
+@st.cache_resource
+def init_connection():
+    connection_string = st.secrets["mongo"]["connection_string"]
+    return pymongo.MongoClient(connection_string)
+
+client = init_connection()
+db = client.rs
+
+# Inicjalizacja GridFS
+fs = gridfs.GridFS(db)
+
+@st.cache_data(ttl=600)
+def get_raports():
+    raports = db['raports']   
+    return pd.DataFrame(list(raports.find({})))
+
+def get_text_files(directory):
+    return glob.glob(os.path.join(directory, '*.txt'))
+
+def read_file(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return file.read()
+
+def document_exists(file_name, collection):
+    return collection.find_one({"name": file_name}) is not None
+
+def insert_to_mongodb(file_path, content, db, collection_name):
+
+    collection = db[collection_name]
+    file_name = os.path.basename(file_path)    
+    # Sprawdzenie, czy dokument już istnieje
+    if document_exists(file_name, collection):
+        print(f"Dokument {file_name} już istnieje w kolekcji.")
+        return
+    
+    document = {
+            "_id": ObjectId(),
+        "name": file_name,
+        "body": content
+    }
+    collection.insert_one(document)
+    print(f"Dokument {file_name} został dodany do kolekcji.")
+
+file_path = 'txt_catalog/'
+# Nazwa kolekcji, do której chcesz dodać metadane pliku
+collection_name = 'raports'
+
+# Dodaj plik tekstowy do kolekcji
+text_files = get_text_files(file_path)
+
+for file_path in text_files:
+    content = read_file(file_path)  
+    insert_to_mongodb(file_path, content, db, collection_name)
+
+
+
 
 def extract_date_from_filename(filename):
     try:
@@ -75,7 +138,7 @@ txt_files = sorted(filt_txt_files, key=extract_date_from_filename)
 txt_files = txt_files[::-1]
 
 # Wczytaj plik PDF
-uploaded_pdf = st.file_uploader("Wybierz plik PDF", type="pdf")
+uploaded_pdf = st.file_uploader("Wybierz plik PDF", type="pdf",accept_multiple_files=True)
 
 if uploaded_pdf is not None:
     # Przetwórz PDF i zapisz jako plik tekstowy
