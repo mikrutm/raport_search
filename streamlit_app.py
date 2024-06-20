@@ -9,6 +9,8 @@ import gridfs
 from bson import ObjectId
 from datetime import datetime
 
+
+#connect to database
 @st.cache_resource
 def init_connection():
     connection_string = st.secrets["mongo"]["connection_string"]
@@ -52,26 +54,25 @@ def insert_to_mongodb(file_path, content, db, collection_name):
     collection.insert_one(document)
     print(f"Dokument {file_name} został dodany do kolekcji.")
 
-file_path = 'txt_catalog/'
-# Nazwa kolekcji, do której chcesz dodać metadane pliku
-collection_name = 'raports'
+def update_database():
+    file_path = 'txt_catalog/'
+    # Nazwa kolekcji, do której chcesz dodać metadane pliku
+    collection_name = 'raports'
 
-# Dodaj plik tekstowy do kolekcji
-text_files = get_text_files(file_path)
+    # Dodaj plik tekstowy do kolekcji
+    text_files = get_text_files(file_path)
 
-for file_path in text_files:
-    content = read_file(file_path)  
-    insert_to_mongodb(file_path, content, db, collection_name)
-
-
-
+    for file_path in text_files:
+        content = read_file(file_path)  
+        insert_to_mongodb(file_path, content, db, collection_name)
 
 def extract_date_from_filename(filename):
     try:
         # Wyodrębnienie części z datą
         date_str = filename.split(' ')[2].split('.')[0:3]
-        print(date_str)
+        
         date_str = '.'.join(date_str)
+        print(date_str)
         return datetime.strptime(date_str, '%d.%m.%y')
     except (IndexError, ValueError):
         return None
@@ -175,7 +176,7 @@ if st.sidebar.button("Szukaj"):
 st.sidebar.title("Lista plików tekstowych")
 # Sortowanie przefiltrowanej listy plików według daty wyodrębnionej z nazw 
 # Funkcja do wyodrębnienia daty z nazwy pliku
-
+update_database()
 
 # Sortowanie przefiltrowanej listy plików według daty wyodrębnionej z nazw plików
 
