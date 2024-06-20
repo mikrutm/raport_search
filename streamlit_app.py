@@ -54,6 +54,7 @@ def insert_to_mongodb(file_path, content, db, collection_name):
     collection.insert_one(document)
     print(f"Dokument {file_name} został dodany do kolekcji.")
 
+@st.cache_data(ttl=600)
 def update_database():
     file_path = 'txt_catalog/'
     # Nazwa kolekcji, do której chcesz dodać metadane pliku
