@@ -72,19 +72,19 @@ def extract_date_from_filename(filename):
         date_str = filename.split(' ')[2].split('.')[0:3]
         
         date_str = '.'.join(date_str)
-        print(date_str)
+        #print(date_str)
         return datetime.strptime(date_str, '%d.%m.%y')
     except (IndexError, ValueError):
         return None
 
 
 def save_text_from_pdf(pdf_file, txt_folder):
+    
     pdf_reader = PdfReader(pdf_file)
     text_content = []
     
     for page in pdf_reader.pages:
         text_content.append(page.extract_text())
-    
     pdf_filename = pdf_file.name
     txt_filename = f"{os.path.splitext(pdf_filename)[0]}.txt"
     txt_path = os.path.join(txt_folder, txt_filename)
@@ -126,27 +126,29 @@ st.title("Przeszukiwanie raportów")
 txt_folder = 'txt_catalog'
 if not os.path.exists(txt_folder):
     os.makedirs(txt_folder)
-
 # Pasek boczny z listą plików tekstowych
 
 txt_files = get_txt_files(txt_folder)
+
 filt_txt_files = []
 for t in txt_files:
     if  None != extract_date_from_filename(t):
         filt_txt_files.append(t)
 
 txt_files = sorted(filt_txt_files, key=extract_date_from_filename)
+
 txt_files = txt_files[::-1]
 
 # Wczytaj plik PDF
-uploaded_pdf = st.file_uploader("Wybierz plik PDF", type="pdf",accept_multiple_files=True)
+uploaded_pdf = st.file_uploader("Wybierz plik PDF", type="pdf")#,accept_multiple_files=True)
+
 
 if uploaded_pdf is not None:
+
     # Przetwórz PDF i zapisz jako plik tekstowy
     txt_path = save_text_from_pdf(uploaded_pdf, txt_folder)
     
     st.success(f"Plik został przetworzony i zapisany jako: {txt_path}")
-
 # Opcje wyszukiwania
 st.sidebar.title("Wyszukiwanie w plikach tekstowych")
 search_word = st.sidebar.text_input("Wpisz słowo do wyszukania")
