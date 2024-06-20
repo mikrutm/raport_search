@@ -36,7 +36,7 @@ def read_file(file_path):
 
 def document_exists(file_name, collection):
     return collection.find_one({"name": file_name}) is not None
-
+@st.cache_data(ttl=600)
 def insert_to_mongodb(file_path, content, db, collection_name):
 
     collection = db[collection_name]
