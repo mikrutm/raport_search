@@ -36,25 +36,29 @@ def read_file(file_path):
 
 def document_exists(file_name, collection):
     return collection.find_one({"name": file_name}) is not None
-@st.cache_data(ttl=600)
+
 def insert_to_mongodb(file_path, content, db, collection_name):
+    try:
+        collection = db[collection_name]
+        file_name = os.path.basename(file_path)    
+        # Sprawdzenie, czy dokument już istnieje
+        if document_exists(file_name, collection):
+            print(f"Dokument {file_name} już istnieje w kolekcji.")
+            return
 
-    collection = db[collection_name]
-    file_name = os.path.basename(file_path)    
-    # Sprawdzenie, czy dokument już istnieje
-    if document_exists(file_name, collection):
-        print(f"Dokument {file_name} już istnieje w kolekcji.")
-        return
-    
-    document = {
-            "_id": ObjectId(),
-        "name": file_name,
-        "body": content
-    }
-    collection.insert_one(document)
-    print(f"Dokument {file_name} został dodany do kolekcji.")
+        document = {
+                "_id": ObjectId(),
+            "name": file_name,
+            "body": content
+        }
+        collection.insert_one(document)
+        print(f"Dokument {file_name} został dodany do kolekcji.")
 
-@st.cache_data(ttl=600)
+    except Exception as e:
+        print(f"Wystąpił błąd {e}")
+
+
+
 def update_database():
     file_path = 'txt_catalog/'
     # Nazwa kolekcji, do której chcesz dodać metadane pliku
