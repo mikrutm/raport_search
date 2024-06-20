@@ -64,6 +64,7 @@ def update_database():
 
     for file_path in text_files:
         content = read_file(file_path)  
+        st.write(content)
         insert_to_mongodb(file_path, content, db, collection_name)
 
 def extract_date_from_filename(filename):
